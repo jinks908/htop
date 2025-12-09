@@ -5,6 +5,17 @@
 - [x] Change: Help menu mappings (reflect changes)
 
 
+#### Debugging Functions
+───────────────────────────────
+
+```c
+if (key < 256) {
+  fprintf(stderr, "Received key: %d (char: %c)\n", key, key);
+} else {
+  fprintf(stderr, "Received key: %d\n", key);
+}
+```
+
 ## Key Mappings
 ───────────────────────────────
 **See Keymap Menu -->** ~/icloud/code/screens/code_screens/htop_custom_bindings.jpg
@@ -32,14 +43,3 @@
 ### CRT.c
 - [Terminal Supports](~/code/repos/htop/CRT.c:1164)
 
-
-#### Debugging Functions
-───────────────────────────────
-
-```c
-if (key < 256) {
-  fprintf(stderr, "Received key: %d (char: %c)\n", key, key);
-} else {
-  fprintf(stderr, "Received key: %d\n", key);
-}
-```
