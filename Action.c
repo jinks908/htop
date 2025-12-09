@@ -681,7 +681,7 @@ static const struct {
    { .key = "      Z: ",  .roInactive = false, .info = "pause/resume process updates" },
    { .key = "      u: ",  .roInactive = false, .info = "show processes of a single user" },
    { .key = "      H: ",  .roInactive = false, .info = "hide/show user process threads" },
-   { .key = "      K: ",  .roInactive = false, .info = "hide/show kernel threads" },
+   { .key = "      V: ",  .roInactive = false, .info = "hide/show kernel threads" },
    { .key = "      O: ",  .roInactive = false, .info = "hide/show processes in containers" },
    { .key = "      f: ",  .roInactive = false, .info = "cursor follows process" },
    { .key = "  + - *: ",  .roInactive = false, .info = "expand/collapse tree/toggle all" },
@@ -709,7 +709,7 @@ static const struct {
    { .key = "      e: ", .roInactive = false, .info = "show process environment" },
    { .key = "      i: ", .roInactive = true,  .info = "set IO priority" },
 
-   // IMPORTANT: 'l' needs to be remapped
+   // IMPORTANT: Remaps 'l' --> 'z'
    { .key = "      z: ", .roInactive = true,  .info = "list open files with lsof" },
    { .key = "      x: ", .roInactive = false, .info = "list file locks of process" },
    { .key = "      s: ", .roInactive = true,  .info = "trace syscalls with strace" },
