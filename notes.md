@@ -15,6 +15,10 @@
 
 ### Panel.c
 - [Scroll up/down](~/code/repos/htop/Panel.c:364)
+- ["PAUSED" Color](~/code/repos/htop/Panel.c:196)
+
+### MainPanel.c
+- [Bottom Panel w/ F-Key Bindings](~/code/repos/htop/MainPanel.c:29)
 
 ### Process.c
 - [Check and Mark 'l'](~/code/repos/htop/Process.c:266)

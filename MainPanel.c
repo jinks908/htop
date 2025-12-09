@@ -25,9 +25,9 @@ in the source distribution for its full text.
 #include "Table.h"
 #include "XUtils.h"
 
-
-static const char* const MainFunctions[]     = {"Help  ", "Setup ", "Search", "Filter", "Tree  ", "SortBy", "Nice -", "Nice +", "Kill  ", "Quit  ", NULL};
-static const char* const MainFunctions_ro[]  = {"Help  ", "Setup ", "Search", "Filter", "Tree  ", "SortBy", "      ", "      ", "      ", "Quit  ", NULL};
+// Add more spacing
+static const char* const MainFunctions[]     = {" Help ", " Setup ", " Search ", " Filter ", " Tree ", " SortBy ", " Nice - ", " Nice + ", " Kill ", " Quit ", NULL};
+static const char* const MainFunctions_ro[]  = {" Help ", " Setup ", " Search ", " Filter ", " Tree ", " SortBy ", "      ", "      ", "      ", " Quit ", NULL};
 
 void MainPanel_updateLabels(MainPanel* this, bool list, bool filter) {
    FunctionBar* bar = MainPanel_getFunctionBar(this);
