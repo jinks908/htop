@@ -550,7 +550,7 @@ static Htop_Reaction actionKillSIGKILL(State* st) {
    if (!ok) {
       beep();
    }
-   napms(500);
+   napms(1200);
 
    return HTOP_REFRESH | HTOP_REDRAW_BAR | HTOP_UPDATE_PANELHDR;
 }
@@ -671,7 +671,7 @@ static const struct {
 } helpLeft[] = {
    { .key = "      #: ",  .roInactive = false, .info = "hide/show header meters" },
    { .key = "    Tab: ",  .roInactive = false, .info = "switch to next screen tab" },
-   { .key = "  C-k/l: ",  .roInactive = false, .info = "scroll process list" },
+   { .key = "    k/l: ",  .roInactive = false, .info = "scroll process list" },
    { .key = " Digits: ",  .roInactive = false, .info = "incremental PID search" },
    { .key = "   F3 /: ",  .roInactive = false, .info = "incremental name search" },
    { .key = "   F4 \\: ", .roInactive = false, .info = "incremental name filtering" },
@@ -683,7 +683,7 @@ static const struct {
    { .key = "      H: ",  .roInactive = false, .info = "hide/show user process threads" },
    { .key = "      K: ",  .roInactive = false, .info = "hide/show kernel threads" },
    { .key = "      O: ",  .roInactive = false, .info = "hide/show processes in containers" },
-   { .key = "      F: ",  .roInactive = false, .info = "cursor follows process" },
+   { .key = "      f: ",  .roInactive = false, .info = "cursor follows process" },
    { .key = "  + - *: ",  .roInactive = false, .info = "expand/collapse tree/toggle all" },
    { .key = "N P M T: ",  .roInactive = false, .info = "sort by PID, CPU%, MEM% or TIME" },
    { .key = "      I: ",  .roInactive = false, .info = "invert sort order" },
@@ -700,7 +700,7 @@ static const struct {
    { .key = "  Space: ", .roInactive = false, .info = "tag process" },
    { .key = "      c: ", .roInactive = false, .info = "tag process and its children" },
    { .key = "      U: ", .roInactive = false, .info = "untag all processes" },
-   { .key = "   F9 k: ", .roInactive = true,  .info = "kill process/tagged processes" },
+   { .key = "   F9 K: ", .roInactive = true,  .info = "kill process / SIGKILL process (respectively)" },
    { .key = "   F7 ]: ", .roInactive = true,  .info = "higher priority (root only)" },
    { .key = "   F8 [: ", .roInactive = true,  .info = "lower priority (+ nice)" },
 #if (defined(HAVE_LIBHWLOC) || defined(HAVE_AFFINITY))
@@ -710,7 +710,7 @@ static const struct {
    { .key = "      i: ", .roInactive = true,  .info = "set IO priority" },
 
    // IMPORTANT: 'l' needs to be remapped
-   { .key = "      l: ", .roInactive = true,  .info = "list open files with lsof" },
+   { .key = "      z: ", .roInactive = true,  .info = "list open files with lsof" },
    { .key = "      x: ", .roInactive = false, .info = "list file locks of process" },
    { .key = "      s: ", .roInactive = true,  .info = "trace syscalls with strace" },
    { .key = "      w: ", .roInactive = false, .info = "wrap process command in multiple lines" },
@@ -837,7 +837,7 @@ static Htop_Reaction actionHelp(State* st) {
       if (String_eq(helpLeft[item].key, "      H: ")) {
          attrset((helpLeft[item].roInactive && readonly) ? CRT_colors[HELP_SHADOW] : CRT_colors[PROCESS_THREAD]);
          mvaddstr(line + item, 33, "threads");
-      } else if (String_eq(helpLeft[item].key, "      K: ")) {
+      } else if (String_eq(helpLeft[item].key, "      V: ")) {
          attrset((helpLeft[item].roInactive && readonly) ? CRT_colors[HELP_SHADOW] : CRT_colors[PROCESS_THREAD]);
          mvaddstr(line + item, 27, "threads");
       }
@@ -930,7 +930,7 @@ void Action_setBindings(Htop_Action* keys) {
    keys['>'] = actionSetSortColumn;
    keys['?'] = actionHelp;
    keys['C'] = actionSetup;
-   keys['F'] = Action_follow;
+   keys['f'] = Action_follow;
    keys['H'] = actionToggleUserlandThreads;
    keys['I'] = actionInvertSortOrder;
    keys['V'] = actionToggleKernelThreads;

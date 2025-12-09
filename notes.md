@@ -11,6 +11,7 @@
 - [Help menu display](~/code/repos/htop/Action.c:656)
 - [Default k/l maps](~/code/repos/htop/Action.c:939)
 - [Auto-send SIGKILL function](~/code/repos/htop/Action.c:541)
+- [Cursor follows process](~/code/repos/htop/Action.c:686)
 
 ### Panel.c
 - [Scroll up/down](~/code/repos/htop/Panel.c:364)
