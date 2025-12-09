@@ -362,7 +362,7 @@ bool Panel_onKey(Panel* this, int key) {
    switch (key) {
       // Scroll down/up/left/right
       case KEY_DOWN:
-      case KEY_CTRL('l'):
+      case 'l':
       #ifdef KEY_C_DOWN
       case KEY_C_DOWN:
       #endif
@@ -370,7 +370,7 @@ bool Panel_onKey(Panel* this, int key) {
          break;
 
       case KEY_UP:
-      case KEY_CTRL('k'):
+      case 'k':
       #ifdef KEY_C_UP
       case KEY_C_UP:
       #endif
@@ -378,7 +378,7 @@ bool Panel_onKey(Panel* this, int key) {
          break;
 
       case KEY_LEFT:
-      case KEY_CTRL('j'):
+      case 'j':
          if (this->scrollH > 0) {
             this->scrollH -= MAXIMUM(CRT_scrollHAmount, 0);
             this->needsRedraw = true;
@@ -386,7 +386,7 @@ bool Panel_onKey(Panel* this, int key) {
          break;
 
       case KEY_RIGHT:
-      case KEY_CTRL(';'):
+      case ';':
          this->scrollH += CRT_scrollHAmount;
          this->needsRedraw = true;
          break;

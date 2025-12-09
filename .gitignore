@@ -54,3 +54,4 @@ callgrind.out.*
 
 # Language Servers
 /.cache/clangd/
+.DS_Store

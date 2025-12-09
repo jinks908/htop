@@ -1161,11 +1161,11 @@ static bool terminalSupportsDefinedKeys(const char* termType) {
          return true;
       }
       break;
-   case 'v':
-      if (String_eq(termType, "vt220")) {
-         return true;
-      }
-      break;
+   // case 'v':
+   //    if (String_eq(termType, "vt220")) {
+   //       return true;
+   //    }
+   //    break;
    case 'x':
       if (String_startsWith(termType, "xterm") && IS_END_OR_DASH(termType[5])) {
          return true;

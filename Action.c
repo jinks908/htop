@@ -537,6 +537,24 @@ static Htop_Reaction actionKill(State* st) {
    return HTOP_REFRESH | HTOP_REDRAW_BAR | HTOP_UPDATE_PANELHDR;
 }
 
+// Automatically send SIGKILL to selected processes
+static Htop_Reaction actionKillSIGKILL(State* st) {
+   if (!Action_writeableProcess(st))
+      return HTOP_OK;
+
+   Panel_setHeader((Panel*)st->mainPanel, "Sending SIGKILL...");
+   Panel_draw((Panel*)st->mainPanel, false, true, true, State_hideFunctionBar(st));
+   refresh();
+
+   bool ok = MainPanel_foreachRow(st->mainPanel, Process_rowSendSignal, (Arg) { .i = SIGKILL }, NULL);
+   if (!ok) {
+      beep();
+   }
+   napms(500);
+
+   return HTOP_REFRESH | HTOP_REDRAW_BAR | HTOP_UPDATE_PANELHDR;
+}
+
 static Htop_Reaction actionFilterByUser(State* st) {
    Panel* usersPanel = Panel_new(0, 0, 0, 0, Class(ListItem), true, FunctionBar_newEnterEsc("Show   ", "Cancel "));
    Panel_setHeader(usersPanel, "Show processes of:");
@@ -915,7 +933,7 @@ void Action_setBindings(Htop_Action* keys) {
    keys['F'] = Action_follow;
    keys['H'] = actionToggleUserlandThreads;
    keys['I'] = actionInvertSortOrder;
-   keys['K'] = actionToggleKernelThreads;
+   keys['V'] = actionToggleKernelThreads;
    keys['M'] = actionSortByMemory;
    keys['N'] = actionSortByPID;
    keys['O'] = actionToggleRunningInContainer;
@@ -937,9 +955,10 @@ void Action_setBindings(Htop_Action* keys) {
    keys['e'] = actionShowEnvScreen;
    keys['h'] = actionHelp;
 
-   // IMPORTANT: Need to remap default 'k'/'l'
-   keys['k'] = actionKill;
-   keys['l'] = actionLsof;
+   // IMPORTANT: This remaps default 'k'/'l'
+   keys['K'] = actionKillSIGKILL;
+   // keys['v'] = actionKill;
+   keys['z'] = actionLsof;
 
    keys['m'] = actionToggleMergedCommand;
    keys['p'] = actionToggleProgramPath;

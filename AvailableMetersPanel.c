@@ -58,7 +58,7 @@ static HandlerResult AvailableMetersPanel_eventHandler(Panel* super, int ch) {
 
    switch (ch) {
       case KEY_F(5):
-      case 'l':
+      case 'y':
       case 'L':
          AvailableMetersPanel_addMeter(header, this->meterPanels[0], Platform_meterTypes[type], param, 0);
          result = HANDLED;

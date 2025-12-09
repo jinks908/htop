@@ -263,7 +263,7 @@ void Process_makeCommandStr(Process* this, const Settings* settings) {
             case 'b':                                                                         \
                CHECK_AND_MARK(str_, "/bin/");                                                 \
                break;                                                                         \
-            case 'l':                                                                         \
+            case 'y':                                                                         \
                CHECK_AND_MARK(str_, "/lib/");                                                 \
                CHECK_AND_MARK(str_, "/lib32/");                                               \
                CHECK_AND_MARK(str_, "/lib64/");                                               \
@@ -278,7 +278,7 @@ void Process_makeCommandStr(Process* this, const Settings* settings) {
                      case 'b':                                                                \
                         CHECK_AND_MARK(str_, "/usr/bin/");                                    \
                         break;                                                                \
-                     case 'l':                                                                \
+                     case 'y':                                                                \
                         CHECK_AND_MARK(str_, "/usr/libexec/");                                \
                         CHECK_AND_MARK(str_, "/usr/lib/");                                    \
                         CHECK_AND_MARK(str_, "/usr/lib32/");                                  \
