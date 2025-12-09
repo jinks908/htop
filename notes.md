@@ -2,11 +2,13 @@
 
 ## TODO
 ───────────────────────────────
-- [ ] Change: Help menu mappings (reflect changes)
+- [x] Change: Help menu mappings (reflect changes)
 
 
 ## Key Mappings
 ───────────────────────────────
+**See Keymap Menu -->** ~/icloud/code/screens/code_screens/htop_custom_bindings.jpg
+
 ### Action.c
 - [Help menu display](~/code/repos/htop/Action.c:656)
 - [Default k/l maps](~/code/repos/htop/Action.c:939)
