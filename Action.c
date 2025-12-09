@@ -653,7 +653,7 @@ static const struct {
 } helpLeft[] = {
    { .key = "      #: ",  .roInactive = false, .info = "hide/show header meters" },
    { .key = "    Tab: ",  .roInactive = false, .info = "switch to next screen tab" },
-   { .key = " Arrows: ",  .roInactive = false, .info = "scroll process list" },
+   { .key = "  C-k/l: ",  .roInactive = false, .info = "scroll process list" },
    { .key = " Digits: ",  .roInactive = false, .info = "incremental PID search" },
    { .key = "   F3 /: ",  .roInactive = false, .info = "incremental name search" },
    { .key = "   F4 \\: ", .roInactive = false, .info = "incremental name filtering" },
@@ -690,6 +690,8 @@ static const struct {
 #endif
    { .key = "      e: ", .roInactive = false, .info = "show process environment" },
    { .key = "      i: ", .roInactive = true,  .info = "set IO priority" },
+
+   // IMPORTANT: 'l' needs to be remapped
    { .key = "      l: ", .roInactive = true,  .info = "list open files with lsof" },
    { .key = "      x: ", .roInactive = false, .info = "list file locks of process" },
    { .key = "      s: ", .roInactive = true,  .info = "trace syscalls with strace" },
@@ -934,8 +936,11 @@ void Action_setBindings(Htop_Action* keys) {
    keys['c'] = actionTagAllChildren;
    keys['e'] = actionShowEnvScreen;
    keys['h'] = actionHelp;
+
+   // IMPORTANT: Need to remap default 'k'/'l'
    keys['k'] = actionKill;
    keys['l'] = actionLsof;
+
    keys['m'] = actionToggleMergedCommand;
    keys['p'] = actionToggleProgramPath;
    keys['q'] = actionQuit;
@@ -944,6 +949,8 @@ void Action_setBindings(Htop_Action* keys) {
    keys['u'] = actionFilterByUser;
    keys['w'] = actionShowCommandScreen;
    keys['x'] = actionShowLocks;
+
+   // F-Keys
    keys[KEY_F(1)] = actionHelp;
    keys[KEY_F(2)] = actionSetup;
    keys[KEY_F(3)] = actionIncSearch;
@@ -955,6 +962,7 @@ void Action_setBindings(Htop_Action* keys) {
    keys[KEY_F(9)] = actionKill;
    keys[KEY_F(10)] = actionQuit;
    keys[KEY_F(18)] = actionExpandCollapseOrSortColumn;
+
    keys[KEY_RECLICK] = actionExpandOrCollapse;
    keys[KEY_SHIFT_TAB] = actionPrevScreen;
    keys['\t'] = actionNextScreen;
