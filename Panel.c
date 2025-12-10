@@ -24,6 +24,7 @@ in the source distribution for its full text.
 #include "RichString.h"
 #include "XUtils.h"
 
+#include "Action.h"
 
 const PanelClass Panel_class = {
    .super = {
@@ -360,9 +361,8 @@ bool Panel_onKey(Panel* this, int key) {
    } while (0)
 
    switch (key) {
-      // Scroll down/up/left/right
+      // ! We've moved the j/k/l/; scroll bindings to MainPanel_eventHandler in MainPanel.c
       case KEY_DOWN:
-      case 'l':
       #ifdef KEY_C_DOWN
       case KEY_C_DOWN:
       #endif
@@ -370,7 +370,6 @@ bool Panel_onKey(Panel* this, int key) {
          break;
 
       case KEY_UP:
-      case 'k':
       #ifdef KEY_C_UP
       case KEY_C_UP:
       #endif
@@ -378,7 +377,6 @@ bool Panel_onKey(Panel* this, int key) {
          break;
 
       case KEY_LEFT:
-      case 'j':
          if (this->scrollH > 0) {
             this->scrollH -= MAXIMUM(CRT_scrollHAmount, 0);
             this->needsRedraw = true;
@@ -386,7 +384,6 @@ bool Panel_onKey(Panel* this, int key) {
          break;
 
       case KEY_RIGHT:
-      case ';':
          this->scrollH += CRT_scrollHAmount;
          this->needsRedraw = true;
          break;

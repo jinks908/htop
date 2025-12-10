@@ -5,7 +5,7 @@
 - [x] Feat: **Auto-follow / auto-tag processes on search select**
     - We may be able to do this using the boolean `isFilter` variable (See ~/code/repos/htop/IncSet.c:47)
 
-- [ ] Feat: **Auto-follow process on selection (cursor move)**
+- [x] Feat: **Auto-follow process on selection (cursor move)**
     - We would have to ensure that the process is unfollowed on cursor move
 
 

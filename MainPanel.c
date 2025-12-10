@@ -112,6 +112,27 @@ static HandlerResult MainPanel_eventHandler(Panel* super, int ch) {
    } else if (ch == 27) {
       this->state->hideSelection = true;
       return HANDLED;
+      // N> Automatically follow process under cursor when scrolling with j/k/l/;
+   } else if (ch == 'l') {
+      Panel_onKey(super, KEY_DOWN);
+      reaction |= Action_follow(this->state);
+      reaction |= HTOP_KEEP_FOLLOWING;
+      result = HANDLED;
+   } else if (ch == 'k') {
+      Panel_onKey(super, KEY_UP);
+      reaction |= Action_follow(this->state);
+      reaction |= HTOP_KEEP_FOLLOWING;
+      result = HANDLED;
+   } else if (ch == 'j') {
+      Panel_onKey(super, KEY_LEFT);
+      reaction |= Action_follow(this->state);
+      reaction |= HTOP_KEEP_FOLLOWING;
+      result = HANDLED;
+   } else if (ch == ';') {
+      Panel_onKey(super, KEY_RIGHT);
+      reaction |= Action_follow(this->state);
+      reaction |= HTOP_KEEP_FOLLOWING;
+      result = HANDLED;
    } else if (ch != ERR && ch > 0 && ch < KEY_MAX && this->keys[ch]) {
       reaction |= (this->keys[ch])(this->state);
       result = HANDLED;
