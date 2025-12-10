@@ -36,6 +36,7 @@ void IncSet_setFilter(IncSet* this, const char* filter) {
    this->filtering = true;
 }
 
+// Search mode
 static const char* const searchFunctions[] = {"Next  ", "Prev   ", "Cancel ", " Search: ", NULL};
 static const char* const searchKeys[] = {"F3", "S-F3", "Esc", "  "};
 static const int searchEvents[] = {KEY_F(3), KEY_F(15), 27, ERR};
