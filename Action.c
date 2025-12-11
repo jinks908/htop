@@ -710,6 +710,7 @@ static const struct {
 } helpRight[] = {
    { .key = "  S-Tab: ", .roInactive = false, .info = "switch to previous screen tab" },
    { .key = "  Space: ", .roInactive = false, .info = "tag process" },
+   { .key = "      a: ", .roInactive = false, .info = "tag all visible processes" },
    { .key = "      c: ", .roInactive = false, .info = "tag process and its children" },
    { .key = "      U: ", .roInactive = false, .info = "untag all processes" },
    { .key = "     F9: ", .roInactive = true,  .info = "kill process / tagged processes" },
@@ -878,6 +879,18 @@ static Htop_Reaction actionHelp(State* st) {
    return HTOP_RECALCULATE | HTOP_REDRAW_BAR | HTOP_KEEP_FOLLOWING;
 }
 
+static Htop_Reaction actionTagAllVisible(State* st) {
+   Panel* panel = (Panel*)st->mainPanel;
+
+   // Iterate through panel items (already filtered by Table_rebuildPanel)
+   for (int i = 0; i < Panel_size(panel); i++) {
+      Row* row = (Row*) Panel_get(panel, i);
+      row->tag = true;
+   }
+
+   return HTOP_REFRESH;
+}
+
 static Htop_Reaction actionUntagAll(State* st) {
    for (int i = 0; i < Panel_size((Panel*)st->mainPanel); i++) {
       Row* row = (Row*) Panel_get((Panel*)st->mainPanel, i);
@@ -955,6 +968,7 @@ void Action_setBindings(Htop_Action* keys) {
    keys['P'] = actionSortByCPU;
    keys['S'] = actionSetup;
    keys['T'] = actionSortByTime;
+   keys['a'] = actionTagAllVisible;
    keys['U'] = actionUntagAll;
 #ifdef SCHEDULER_SUPPORT
    keys['Y'] = actionSetSchedPolicy;
@@ -965,7 +979,7 @@ void Action_setBindings(Htop_Action* keys) {
    keys['\177'] = actionCollapseIntoParent;
    keys['\\'] = actionIncFilter;
    keys[']'] = actionHigherPriority;
-   keys['a'] = actionSetAffinity;
+   // keys['a'] = actionSetAffinity;
    keys['c'] = actionTagAllChildren;
    keys['e'] = actionShowEnvScreen;
    keys['h'] = actionHelp;
