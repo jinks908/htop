@@ -1,15 +1,27 @@
-# Forking Htop
+# Htop Fork
 
 ## TODO
-────────────────────────────────────────────────────────────────
+---
+- [ ] Feat: Tag all processes in filter mode
 - [x] Feat: **Jump to top/bottom with `gg/G`**
 - [x] Add: **New mappings to help menu**
-    - [x] Separate Arrows vs. j/k/l/; keys
-    - [x] Separate kill mappings (SIGTERM vs. SIGKILL)
+   - [x] Separate Arrows vs. j/k/l/; keys
+   - [x] Separate kill mappings (SIGTERM vs. SIGKILL)
 
 
 ## Toggle Follow
-**────────────────────────────────────────────────────────────────**
+---
+### field `tag`
+provided by `"Row.h"`
+────────────────────────────────────────
+Type: `bool`
+Whether the row was tagged by the user
+────────────────────────────────────────
+```cpp
+// In struct Row_
+public: bool tag
+```
+
 ```c
 static Htop_Reaction actionToggleFollow(State* st) {
    Machine* host = st->host;
@@ -24,52 +36,53 @@ static Htop_Reaction actionToggleFollow(State* st) {
    }
 }
 ```
+---
 
 
 - [x] Feat: **Auto-follow / auto-tag processes on search select**
-    - We may be able to do this using the boolean `isFilter` variable (See ~/code/repos/htop/IncSet.c:47)
+   - We may be able to do this using the boolean `isFilter` variable (See ~/code/repos/htop/IncSet.c:47)
 
 - [x] Feat: **Auto-follow process on selection (cursor move)**
-    - We would have to ensure that the process is unfollowed on cursor move
+   - We would have to ensure that the process is unfollowed on cursor move
 
 
 ### Install Performance Co-Pilot
-**────────────────────────────────────────────────────────────────**
-  * `--enable-pcp`:
-    enable Performance Co-Pilot support via a new pcp-htop utility
-    - dependency: *libpcp*
-    - default: *no*
+---
+* `--enable-pcp`:
+   enable Performance Co-Pilot support via a new pcp-htop utility
+   - dependency: *libpcp*
+   - default: *no*
 
 
 ### Follow highlight color:
-**────────────────────────────────────────────────────────────────**
+---
 function `Panel_setSelectionColor`
 provided by `"Panel.h"`
-**────────────────────────────────────────────────────────────────**
+---
 → `void`
 Parameters:
 - `Panel * this (aka struct Panel_ *)`
 - `ColorElements colorId (aka enum ColorElements_)`
-**────────────────────────────────────────────────────────────────**
+---
 ```cpp
 void Panel_setSelectionColor(Panel *this, ColorElements colorId)
 ```
 
 
 #### Debugging Functions
-**────────────────────────────────────────────────────────────────**
+---
 **Print key value received**
 ```c
 if (key < 256) {
-  fprintf(stderr, "Received key: %d (char: %c)\n", key, key);
+   fprintf(stderr, "Received key: %d (char: %c)\n", key, key);
 } else {
-  fprintf(stderr, "Received key: %d\n", key);
+   fprintf(stderr, "Received key: %d\n", key);
 }
 ```
 
 
 ## Key Mappings
-**────────────────────────────────────────────────────────────────**
+---
 **See Keymap Menu -->** ~/icloud/code/screens/code_screens/htop_custom_bindings.jpg
 
 ---
@@ -93,6 +106,7 @@ if (key < 256) {
 ---
 
 ### MainPanel.c
+- [j/k/l/; Mappings](~/code/repos/htop/MainPanel.c:116)
 - [Bottom Panel w/ F-Key Bindings](~/code/repos/htop/MainPanel.c:29)
 
 ---
