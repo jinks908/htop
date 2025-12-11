@@ -2,8 +2,8 @@
 
 ## TODO
 ────────────────────────────────────────────────────────────────
-- [ ] Feat: **Jump to top/bottom with `gg/G`**
-- [ ] Add: **New mappings to help menu**
+- [x] Feat: **Jump to top/bottom with `gg/G`**
+- [x] Add: **New mappings to help menu**
     - [x] Separate Arrows vs. j/k/l/; keys
     - [x] Separate kill mappings (SIGTERM vs. SIGKILL)
 
