@@ -193,8 +193,8 @@ static OpenFiles_ProcessData* OpenFilesScreen_getProcessData(pid_t pid) {
          }
          case 'c':  /* process command name  */
          case 'd':  /* file's device character code */
-         case 'g':  /* process group ID */
-         case 'G':  /* file flags */
+         // case 'g':  /* process group ID */
+         // case 'G':  /* file flags */
          case 'k':  /* link count */
          case 'l':  /* file's lock status */
          case 'L':  /* process login name */

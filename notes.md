@@ -2,9 +2,30 @@
 
 ## TODO
 ────────────────────────────────────────────────────────────────
+- [ ] Feat: **Jump to top/bottom with `gg/G`**
 - [ ] Add: **New mappings to help menu**
-    - Separate Arrows vs. j/k/l/; keys
-    - Separate kill mappings (SIGTERM vs. SIGKILL)
+    - [x] Separate Arrows vs. j/k/l/; keys
+    - [x] Separate kill mappings (SIGTERM vs. SIGKILL)
+
+
+## Toggle Follow
+**────────────────────────────────────────────────────────────────**
+```c
+static Htop_Reaction actionToggleFollow(State* st) {
+   Machine* host = st->host;
+   if (host->activeTable->following == -1) {
+      host->activeTable->following = MainPanel_selectedRow(st->mainPanel);
+      Panel_setSelectionColor((Panel*)st->mainPanel, PANEL_SELECTION_FOLLOW);
+      return HTOP_KEEP_FOLLOWING;
+   } else {
+      host->activeTable->following = -1;
+      Panel_setSelectionColor((Panel*)st->mainPanel, PANEL_SELECTION_FOCUS);
+      return HTOP_OK;
+   }
+}
+```
+
+
 - [x] Feat: **Auto-follow / auto-tag processes on search select**
     - We may be able to do this using the boolean `isFilter` variable (See ~/code/repos/htop/IncSet.c:47)
 

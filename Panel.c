@@ -369,11 +369,21 @@ bool Panel_onKey(Panel* this, int key) {
          this->selected++;
          break;
 
+      // Jump to bottom
+      case 'G':
+         this->selected = size - 1;
+         break;
+
       case KEY_UP:
       #ifdef KEY_C_UP
       case KEY_C_UP:
       #endif
          this->selected--;
+         break;
+
+      // Jump to top
+      case 'g':
+         this->selected = 0;
          break;
 
       case KEY_LEFT:

@@ -575,6 +575,19 @@ static Htop_Reaction actionFilterByUser(State* st) {
    return HTOP_REFRESH | HTOP_REDRAW_BAR | HTOP_UPDATE_PANELHDR;
 }
 
+static Htop_Reaction actionToggleFollow(State* st) {
+   Machine* host = st->host;
+   if (host->activeTable->following == -1) {
+      host->activeTable->following = MainPanel_selectedRow(st->mainPanel);
+      Panel_setSelectionColor((Panel*)st->mainPanel, PANEL_SELECTION_FOLLOW);
+      return HTOP_KEEP_FOLLOWING;
+   } else {
+      host->activeTable->following = -1;
+      Panel_setSelectionColor((Panel*)st->mainPanel, PANEL_SELECTION_FOCUS);
+      return HTOP_OK;
+   }
+}
+
 Htop_Reaction Action_follow(State* st) {
    st->host->activeTable->following = MainPanel_selectedRow(st->mainPanel);
    Panel_setSelectionColor((Panel*)st->mainPanel, PANEL_SELECTION_FOLLOW);
@@ -671,7 +684,8 @@ static const struct {
 } helpLeft[] = {
    { .key = "      #: ",  .roInactive = false, .info = "hide/show header meters" },
    { .key = "    Tab: ",  .roInactive = false, .info = "switch to next screen tab" },
-   { .key = "    k/l: ",  .roInactive = false, .info = "scroll process list" },
+   { .key = " Arrows: ",  .roInactive = false, .info = "scroll process list" },
+   { .key = "    k/l: ",  .roInactive = false, .info = "scroll process list (auto-follow)" },
    { .key = " Digits: ",  .roInactive = false, .info = "incremental PID search" },
    { .key = "   F3 /: ",  .roInactive = false, .info = "incremental name search" },
    { .key = "   F4 \\: ", .roInactive = false, .info = "incremental name filtering" },
@@ -686,8 +700,6 @@ static const struct {
    { .key = "      f: ",  .roInactive = false, .info = "cursor follows process" },
    { .key = "  + - *: ",  .roInactive = false, .info = "expand/collapse tree/toggle all" },
    { .key = "N P M T: ",  .roInactive = false, .info = "sort by PID, CPU%, MEM% or TIME" },
-   { .key = "      I: ",  .roInactive = false, .info = "invert sort order" },
-   { .key = " F6 > .: ",  .roInactive = false, .info = "select sort column" },
    { .key = NULL, .info = NULL }
 };
 
@@ -700,7 +712,8 @@ static const struct {
    { .key = "  Space: ", .roInactive = false, .info = "tag process" },
    { .key = "      c: ", .roInactive = false, .info = "tag process and its children" },
    { .key = "      U: ", .roInactive = false, .info = "untag all processes" },
-   { .key = "   F9 K: ", .roInactive = true,  .info = "kill process / SIGKILL process (respectively)" },
+   { .key = "     F9: ", .roInactive = true,  .info = "kill process / tagged processes" },
+   { .key = "      K: ", .roInactive = true,  .info = "kill -9 (sends direct SIGKILL)" },
    { .key = "   F7 ]: ", .roInactive = true,  .info = "higher priority (root only)" },
    { .key = "   F8 [: ", .roInactive = true,  .info = "lower priority (+ nice)" },
 #if (defined(HAVE_LIBHWLOC) || defined(HAVE_AFFINITY))
@@ -714,6 +727,8 @@ static const struct {
    { .key = "      x: ", .roInactive = false, .info = "list file locks of process" },
    { .key = "      s: ", .roInactive = true,  .info = "trace syscalls with strace" },
    { .key = "      w: ", .roInactive = false, .info = "wrap process command in multiple lines" },
+   { .key = "      I: ", .roInactive = false, .info = "invert sort order" },
+   { .key = " F6 > .: ", .roInactive = false, .info = "select sort column" },
 #ifdef SCHEDULER_SUPPORT
    { .key = "      Y: ", .roInactive = true,  .info = "set scheduling policy" },
 #endif
@@ -930,7 +945,7 @@ void Action_setBindings(Htop_Action* keys) {
    keys['>'] = actionSetSortColumn;
    keys['?'] = actionHelp;
    keys['C'] = actionSetup;
-   keys['f'] = Action_follow;
+   keys['f'] = actionToggleFollow;
    keys['H'] = actionToggleUserlandThreads;
    keys['I'] = actionInvertSortOrder;
    keys['V'] = actionToggleKernelThreads;
