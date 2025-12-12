@@ -31,8 +31,8 @@ static const char* const MainFunctions_ro[]  = {" Help ", " Setup ", " Search ",
 
 void MainPanel_updateLabels(MainPanel* this, bool list, bool filter) {
    FunctionBar* bar = MainPanel_getFunctionBar(this);
-   FunctionBar_setLabel(bar, KEY_F(5), list   ? "List  " : "Tree  ");
-   FunctionBar_setLabel(bar, KEY_F(4), filter ? "FILTER" : "Filter");
+   FunctionBar_setLabel(bar, KEY_F(5), list   ? " List " : " Tree ");
+   FunctionBar_setLabel(bar, KEY_F(4), filter ? " FILTER " : " Filter ");
 }
 
 static void MainPanel_idSearch(MainPanel* this, int ch) {

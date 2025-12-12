@@ -272,7 +272,7 @@ void Process_makeCommandStr(Process* this, const Settings* settings) {
             case 's':                                                                         \
                CHECK_AND_MARK(str_, "/sbin/");                                                \
                break;                                                                         \
-            case 'u':                                                                         \
+            case 'U':                                                                         \
                if (String_startsWith(str_, "/usr/")) {                                        \
                   switch ((str_)[5]) {                                                        \
                      case 'b':                                                                \

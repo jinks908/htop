@@ -677,6 +677,8 @@ static Htop_Reaction actionTogglePauseUpdate(State* st) {
    return HTOP_REFRESH | HTOP_REDRAW_BAR | HTOP_KEEP_FOLLOWING;
 }
 
+// #:# Help Menu Left
+// #;# ------------------------------------------------------------ */
 static const struct {
    const char* key;
    bool roInactive;
@@ -693,16 +695,19 @@ static const struct {
    { .key = "      p: ",  .roInactive = false, .info = "toggle program path" },
    { .key = "      m: ",  .roInactive = false, .info = "toggle merged command" },
    { .key = "      Z: ",  .roInactive = false, .info = "pause/resume process updates" },
-   { .key = "      u: ",  .roInactive = false, .info = "show processes of a single user" },
+   { .key = "      U: ",  .roInactive = false, .info = "show processes of a single user" },
    { .key = "      H: ",  .roInactive = false, .info = "hide/show user process threads" },
    { .key = "      V: ",  .roInactive = false, .info = "hide/show kernel threads" },
    { .key = "      O: ",  .roInactive = false, .info = "hide/show processes in containers" },
    { .key = "      f: ",  .roInactive = false, .info = "cursor follows process" },
    { .key = "  + - *: ",  .roInactive = false, .info = "expand/collapse tree/toggle all" },
    { .key = "N P M T: ",  .roInactive = false, .info = "sort by PID, CPU%, MEM% or TIME" },
+   { .key = "    h ?: ",  .roInactive = false, .info = "show this help screen" },
    { .key = NULL, .info = NULL }
 };
 
+// #:# Help Menu Right
+// #;# ------------------------------------------------------------ */
 static const struct {
    const char* key;
    bool roInactive;
@@ -712,7 +717,7 @@ static const struct {
    { .key = "  Space: ", .roInactive = false, .info = "tag process" },
    { .key = "      a: ", .roInactive = false, .info = "tag all visible processes" },
    { .key = "      c: ", .roInactive = false, .info = "tag process and its children" },
-   { .key = "      U: ", .roInactive = false, .info = "untag all processes" },
+   { .key = "      u: ", .roInactive = false, .info = "untag all processes" },
    { .key = "     F9: ", .roInactive = true,  .info = "kill process / tagged processes" },
    { .key = "      K: ", .roInactive = true,  .info = "kill -9 (sends direct SIGKILL)" },
    { .key = "   F7 ]: ", .roInactive = true,  .info = "higher priority (root only)" },
@@ -722,20 +727,17 @@ static const struct {
 #endif
    { .key = "      e: ", .roInactive = false, .info = "show process environment" },
    { .key = "      i: ", .roInactive = true,  .info = "set IO priority" },
-
-   // IMPORTANT: Remaps 'l' --> 'z'
    { .key = "      z: ", .roInactive = true,  .info = "list open files with lsof" },
    { .key = "      x: ", .roInactive = false, .info = "list file locks of process" },
    { .key = "      s: ", .roInactive = true,  .info = "trace syscalls with strace" },
    { .key = "      w: ", .roInactive = false, .info = "wrap process command in multiple lines" },
    { .key = "      I: ", .roInactive = false, .info = "invert sort order" },
-   { .key = " F6 > .: ", .roInactive = false, .info = "select sort column" },
+   { .key = "      .: ", .roInactive = false, .info = "select sort column" },
 #ifdef SCHEDULER_SUPPORT
    { .key = "      Y: ", .roInactive = true,  .info = "set scheduling policy" },
 #endif
-   { .key = " F2 C S: ", .roInactive = false, .info = "setup" },
-   { .key = " F1 h ?: ", .roInactive = false, .info = "show this help screen" },
-   { .key = "  F10 q: ", .roInactive = false, .info = "quit" },
+   { .key = "      S: ", .roInactive = false, .info = "setup" },
+   { .key = "      q: ", .roInactive = false, .info = "quit" },
    { .key = NULL, .info = NULL }
 };
 
@@ -879,6 +881,10 @@ static Htop_Reaction actionHelp(State* st) {
    return HTOP_RECALCULATE | HTOP_REDRAW_BAR | HTOP_KEEP_FOLLOWING;
 }
 
+// #:# Main Actions
+// #;# ------------------------------------------------------------ */
+
+// ## Toggle / Tag Functions
 static Htop_Reaction actionTagAllVisible(State* st) {
    Panel* panel = (Panel*)st->mainPanel;
 
@@ -944,6 +950,7 @@ static Htop_Reaction actionShowCommandScreen(State* st) {
    return HTOP_REFRESH | HTOP_REDRAW_BAR;
 }
 
+// ## Key Bindings
 void Action_setBindings(Htop_Action* keys) {
    keys[' '] = actionTag;
    keys['#'] = actionToggleHideMeters;
@@ -957,7 +964,6 @@ void Action_setBindings(Htop_Action* keys) {
    keys['='] = actionExpandOrCollapse;
    keys['>'] = actionSetSortColumn;
    keys['?'] = actionHelp;
-   keys['C'] = actionSetup;
    keys['f'] = actionToggleFollow;
    keys['H'] = actionToggleUserlandThreads;
    keys['I'] = actionInvertSortOrder;
@@ -969,7 +975,7 @@ void Action_setBindings(Htop_Action* keys) {
    keys['S'] = actionSetup;
    keys['T'] = actionSortByTime;
    keys['a'] = actionTagAllVisible;
-   keys['U'] = actionUntagAll;
+   keys['u'] = actionUntagAll;
 #ifdef SCHEDULER_SUPPORT
    keys['Y'] = actionSetSchedPolicy;
 #endif
@@ -994,13 +1000,13 @@ void Action_setBindings(Htop_Action* keys) {
    keys['q'] = actionQuit;
    keys['s'] = actionStrace;
    keys['t'] = actionToggleTreeView;
-   keys['u'] = actionFilterByUser;
+   keys['U'] = actionFilterByUser;
    keys['w'] = actionShowCommandScreen;
    keys['x'] = actionShowLocks;
 
-   // F-Keys
-   keys[KEY_F(1)] = actionHelp;
-   keys[KEY_F(2)] = actionSetup;
+   // ## F-Keys
+   // keys[KEY_F(1)] = actionHelp;
+   // keys[KEY_F(2)] = actionSetup;
    keys[KEY_F(3)] = actionIncSearch;
    keys[KEY_F(4)] = actionIncFilter;
    keys[KEY_F(5)] = actionToggleTreeView;
@@ -1008,7 +1014,7 @@ void Action_setBindings(Htop_Action* keys) {
    keys[KEY_F(7)] = actionHigherPriority;
    keys[KEY_F(8)] = actionLowerPriority;
    keys[KEY_F(9)] = actionKill;
-   keys[KEY_F(10)] = actionQuit;
+   // keys[KEY_F(10)] = actionQuit;
    keys[KEY_F(18)] = actionExpandCollapseOrSortColumn;
 
    keys[KEY_RECLICK] = actionExpandOrCollapse;

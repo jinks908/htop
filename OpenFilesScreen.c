@@ -202,7 +202,7 @@ static OpenFiles_ProcessData* OpenFilesScreen_getProcessData(pid_t pid) {
          case 'P':  /* protocol name */
          case 'R':  /* parent process ID */
          case 'T':  /* TCP/TPI information, identified by prefixes */
-         case 'u':  /* process user ID */
+         case 'U':  /* process user ID */
             /* ignore */
             break;
       }
