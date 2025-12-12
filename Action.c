@@ -666,6 +666,29 @@ static Htop_Reaction actionTag(State* st) {
    return HTOP_OK;
 }
 
+// Copy PID of selected process to clipboard
+static Htop_Reaction actionCopyPid(State* st) {
+   Row* row = (Row*) Panel_getSelected((Panel*)st->mainPanel);
+   if (!row)
+      return HTOP_OK;
+
+   // Run shell command to copy PID
+   char cmd[64];
+   snprintf(cmd, sizeof(cmd), "printf %d | pbcopy", row->id);
+   system(cmd);
+
+   // Format confirmation message
+   char message[64];
+   snprintf(message, sizeof(message), "PID %d copied to clipboard", row->id);
+
+   // Display confirmation in header
+   Panel_setHeader((Panel*)st->mainPanel, message);
+   Panel_draw((Panel*)st->mainPanel, false, true, true, State_hideFunctionBar(st));
+   refresh();
+
+   return HTOP_OK | HTOP_KEEP_FOLLOWING;
+}
+
 static Htop_Reaction actionRedraw(ATTR_UNUSED State* st) {
    clear();
    // HTOP_RECALCULATE here to make Ctrl-L also refresh the data and not only redraw
@@ -689,6 +712,7 @@ static const struct {
    { .key = " Arrows: ",  .roInactive = false, .info = "scroll process list" },
    { .key = "    k/l: ",  .roInactive = false, .info = "scroll process list (auto-follow)" },
    { .key = " Digits: ",  .roInactive = false, .info = "incremental PID search" },
+   { .key = "      y: ",  .roInactive = false, .info = "copy selected PID to clipboard" },
    { .key = "   F3 /: ",  .roInactive = false, .info = "incremental name search" },
    { .key = "   F4 \\: ", .roInactive = false, .info = "incremental name filtering" },
    { .key = "   F5 t: ",  .roInactive = false, .info = "tree view" },
@@ -697,7 +721,7 @@ static const struct {
    { .key = "      Z: ",  .roInactive = false, .info = "pause/resume process updates" },
    { .key = "      U: ",  .roInactive = false, .info = "show processes of a single user" },
    { .key = "      H: ",  .roInactive = false, .info = "hide/show user process threads" },
-   { .key = "      V: ",  .roInactive = false, .info = "hide/show kernel threads" },
+   // { .key = "      V: ",  .roInactive = false, .info = "hide/show kernel threads" },
    { .key = "      O: ",  .roInactive = false, .info = "hide/show processes in containers" },
    { .key = "      f: ",  .roInactive = false, .info = "cursor follows process" },
    { .key = "  + - *: ",  .roInactive = false, .info = "expand/collapse tree/toggle all" },
@@ -953,6 +977,7 @@ static Htop_Reaction actionShowCommandScreen(State* st) {
 // ## Key Bindings
 void Action_setBindings(Htop_Action* keys) {
    keys[' '] = actionTag;
+   keys['y'] = actionCopyPid;
    keys['#'] = actionToggleHideMeters;
    keys['*'] = actionExpandOrCollapseAllBranches;
    keys['+'] = actionExpandOrCollapse;
