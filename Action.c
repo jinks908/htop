@@ -432,6 +432,8 @@ static Htop_Reaction actionQuit(ATTR_UNUSED State* st) {
    return HTOP_QUIT;
 }
 
+// ! Unused function since we remapped 'a' --> actionTagAllVisible
+/*
 static Htop_Reaction actionSetAffinity(State* st) {
    if (!Action_writeableProcess(st))
       return HTOP_OK;
@@ -467,6 +469,7 @@ static Htop_Reaction actionSetAffinity(State* st) {
    return HTOP_OK;
 #endif
 }
+*/
 
 #ifdef SCHEDULER_SUPPORT
 static Htop_Reaction actionSetSchedPolicy(State* st) {
