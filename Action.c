@@ -5,6 +5,7 @@ Released under the GNU GPLv2+, see the COPYING file
 in the source distribution for its full text.
 */
 
+#include "Panel.h"
 #include "config.h" // IWYU pragma: keep
 
 #include "Action.h"
@@ -687,9 +688,33 @@ static Htop_Reaction actionCopyPid(State* st) {
    // Display confirmation in header
    Panel_setHeader((Panel*)st->mainPanel, message);
    Panel_draw((Panel*)st->mainPanel, false, true, true, State_hideFunctionBar(st));
-   refresh();
+   // refresh();
 
-   return HTOP_OK | HTOP_KEEP_FOLLOWING;
+   return HTOP_REFRESH | HTOP_OK | HTOP_KEEP_FOLLOWING;
+}
+
+// Copy full command path of selected process
+static Htop_Reaction actionCopyCmdPath(State* st) {
+   Row* row = (Row*) Panel_getSelected((Panel*)st->mainPanel);
+   if (!row)
+      return HTOP_OK;
+
+   char cmdPath[PATH_MAX];
+   // Get process command path
+   snprintf(cmdPath, sizeof(cmdPath), "printf '%s' | pbcopy", Process_getCommand((Process*)row));
+   // Run shell command to copy command path to clipboard
+   system(cmdPath);
+
+   // Format confirmation message
+   char message[128];
+   snprintf(message, sizeof(message), "Command path of PID %d copied to clipboard", row->id);
+
+   // Display confirmation in header
+   Panel_setHeader((Panel*)st->mainPanel, message);
+   Panel_draw((Panel*)st->mainPanel, false, true, true, State_hideFunctionBar(st));
+   // refresh();
+
+   return HTOP_REFRESH | HTOP_OK | HTOP_KEEP_FOLLOWING;
 }
 
 static Htop_Reaction actionRedraw(ATTR_UNUSED State* st) {
@@ -715,7 +740,8 @@ static const struct {
    { .key = " Arrows: ",  .roInactive = false, .info = "scroll process list" },
    { .key = "    k/l: ",  .roInactive = false, .info = "scroll process list (auto-follow)" },
    { .key = " Digits: ",  .roInactive = false, .info = "incremental PID search" },
-   { .key = "      y: ",  .roInactive = false, .info = "copy selected PID to clipboard" },
+   { .key = "      c: ",  .roInactive = false, .info = "copy selected PID to clipboard" },
+   { .key = "      y: ",  .roInactive = false, .info = "copy selected cmd path to clipboard" },
    { .key = "   F3 /: ",  .roInactive = false, .info = "incremental name search" },
    { .key = "   F4 \\: ", .roInactive = false, .info = "incremental name filtering" },
    { .key = "   F5 t: ",  .roInactive = false, .info = "tree view" },
@@ -743,7 +769,7 @@ static const struct {
    { .key = "  S-Tab: ", .roInactive = false, .info = "switch to previous screen tab" },
    { .key = "  Space: ", .roInactive = false, .info = "tag process" },
    { .key = "      a: ", .roInactive = false, .info = "tag all visible processes" },
-   { .key = "      c: ", .roInactive = false, .info = "tag process and its children" },
+   { .key = "      C: ", .roInactive = false, .info = "tag process and its children" },
    { .key = "      u: ", .roInactive = false, .info = "untag all processes" },
    { .key = "     F9: ", .roInactive = true,  .info = "kill process / tagged processes" },
    { .key = "      K: ", .roInactive = true,  .info = "kill -9 (sends direct SIGKILL)" },
@@ -980,7 +1006,9 @@ static Htop_Reaction actionShowCommandScreen(State* st) {
 // ## Key Bindings
 void Action_setBindings(Htop_Action* keys) {
    keys[' '] = actionTag;
-   keys['y'] = actionCopyPid;
+   keys['c'] = actionCopyPid;
+   keys['y'] = actionCopyCmdPath;
+   // keys['Y'] = actionCopyFullCmdPath;
    keys['#'] = actionToggleHideMeters;
    keys['*'] = actionExpandOrCollapseAllBranches;
    keys['+'] = actionExpandOrCollapse;
@@ -1004,9 +1032,11 @@ void Action_setBindings(Htop_Action* keys) {
    keys['T'] = actionSortByTime;
    keys['a'] = actionTagAllVisible;
    keys['u'] = actionUntagAll;
-#ifdef SCHEDULER_SUPPORT
-   keys['Y'] = actionSetSchedPolicy;
-#endif
+
+// #ifdef SCHEDULER_SUPPORT
+//    keys['Y'] = actionSetSchedPolicy;
+// #endif
+
    keys['Z'] = actionTogglePauseUpdate;
    keys['['] = actionLowerPriority;
    keys['\014'] = actionRedraw; // Ctrl+L
@@ -1014,7 +1044,7 @@ void Action_setBindings(Htop_Action* keys) {
    keys['\\'] = actionIncFilter;
    keys[']'] = actionHigherPriority;
    // keys['a'] = actionSetAffinity;
-   keys['c'] = actionTagAllChildren;
+   keys['C'] = actionTagAllChildren;
    keys['e'] = actionShowEnvScreen;
    keys['h'] = actionHelp;
 
