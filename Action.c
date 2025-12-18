@@ -693,28 +693,55 @@ static Htop_Reaction actionCopyPid(State* st) {
    return HTOP_REFRESH | HTOP_OK | HTOP_KEEP_FOLLOWING;
 }
 
-// Copy full command path of selected process
-static Htop_Reaction actionCopyCmdPath(State* st) {
+// Copy the command path of the selected process to system clipboard
+static Htop_Reaction copyCmdPath(State* st, bool fullPath) {
    Row* row = (Row*) Panel_getSelected((Panel*)st->mainPanel);
    if (!row)
       return HTOP_OK;
 
+   // Initialize
+   Process* process = (Process*)row;
+   const char* command;
    char cmdPath[PATH_MAX];
-   // Get process command path
-   snprintf(cmdPath, sizeof(cmdPath), "printf '%s' | pbcopy", Process_getCommand((Process*)row));
-   // Run shell command to copy command path to clipboard
-   system(cmdPath);
-
-   // Format confirmation message
    char message[128];
-   snprintf(message, sizeof(message), "Command path of PID %d copied to clipboard", row->id);
+
+   if (fullPath) {
+      // Get full command path
+      command = Process_getCommandFull(process);
+      // Format confirmation message
+      snprintf(message, sizeof(message), "FULL command path of %d copied to clipboard", row->id);
+   } else {
+      const char* cmdline = Process_getCommandFull(process);
+      // If merge command is shorter than the full command
+      if (cmdline && process->cmdlineBasenameStart < strlen(cmdline)) {
+         // Move pointer to start index of basename and store for output
+         command = cmdline + process->cmdlineBasenameStart;
+      } else {
+         // Fallback
+         command = cmdline;
+      }
+      // Format confirmation message
+      snprintf(message, sizeof(message), "MERGED command path of %d copied to clipboard", row->id);
+   }
+
+   // Create and run shell command to copy command path to clipboard
+   snprintf(cmdPath, sizeof(cmdPath), "printf '%s' | pbcopy", command);
+   system(cmdPath);
 
    // Display confirmation in header
    Panel_setHeader((Panel*)st->mainPanel, message);
    Panel_draw((Panel*)st->mainPanel, false, true, true, State_hideFunctionBar(st));
-   // refresh();
 
    return HTOP_REFRESH | HTOP_OK | HTOP_KEEP_FOLLOWING;
+}
+
+// Copy full command path of selected process
+static Htop_Reaction actionCopyCmdPath(State* st) {
+   return copyCmdPath(st, false);
+}
+
+static Htop_Reaction actionCopyFullCmdPath(State* st) {
+   return copyCmdPath(st, true);
 }
 
 static Htop_Reaction actionRedraw(ATTR_UNUSED State* st) {
@@ -741,7 +768,7 @@ static const struct {
    { .key = "    k/l: ",  .roInactive = false, .info = "scroll process list (auto-follow)" },
    { .key = " Digits: ",  .roInactive = false, .info = "incremental PID search" },
    { .key = "      c: ",  .roInactive = false, .info = "copy selected PID to clipboard" },
-   { .key = "      y: ",  .roInactive = false, .info = "copy selected cmd path to clipboard" },
+   { .key = "    y/Y: ",  .roInactive = false, .info = "copy selected cmd/full path to clipboard" },
    { .key = "   F3 /: ",  .roInactive = false, .info = "incremental name search" },
    { .key = "   F4 \\: ", .roInactive = false, .info = "incremental name filtering" },
    { .key = "   F5 t: ",  .roInactive = false, .info = "tree view" },
@@ -907,7 +934,7 @@ static Htop_Reaction actionHelp(State* st) {
       mvaddstr(line + item, 1,  helpLeft[item].key);
       if (String_eq(helpLeft[item].key, "      H: ")) {
          attrset((helpLeft[item].roInactive && readonly) ? CRT_colors[HELP_SHADOW] : CRT_colors[PROCESS_THREAD]);
-         mvaddstr(line + item, 33, "threads");
+         mvaddstr(line + item, 53, "threads");
       } else if (String_eq(helpLeft[item].key, "      V: ")) {
          attrset((helpLeft[item].roInactive && readonly) ? CRT_colors[HELP_SHADOW] : CRT_colors[PROCESS_THREAD]);
          mvaddstr(line + item, 27, "threads");
@@ -917,9 +944,9 @@ static Htop_Reaction actionHelp(State* st) {
 
    for (item = 0; helpRight[item].key; item++) {
       attrset((helpRight[item].roInactive && readonly) ? CRT_colors[HELP_SHADOW] : CRT_colors[HELP_BOLD]);
-      mvaddstr(line + item, 43, helpRight[item].key);
+      mvaddstr(line + item, 53, helpRight[item].key);
       attrset((helpRight[item].roInactive && readonly) ? CRT_colors[HELP_SHADOW] : CRT_colors[DEFAULT_COLOR]);
-      mvaddstr(line + item, 52, helpRight[item].info);
+      mvaddstr(line + item, 62, helpRight[item].info);
    }
    line += MAXIMUM(leftHelpItems, item);
    line++;
@@ -1008,7 +1035,7 @@ void Action_setBindings(Htop_Action* keys) {
    keys[' '] = actionTag;
    keys['c'] = actionCopyPid;
    keys['y'] = actionCopyCmdPath;
-   // keys['Y'] = actionCopyFullCmdPath;
+   keys['Y'] = actionCopyFullCmdPath;
    keys['#'] = actionToggleHideMeters;
    keys['*'] = actionExpandOrCollapseAllBranches;
    keys['+'] = actionExpandOrCollapse;

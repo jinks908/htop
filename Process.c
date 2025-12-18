@@ -815,6 +815,10 @@ const char* Process_getCommand(const Process* this) {
    return this->mergedCommand.str;
 }
 
+const char* Process_getCommandFull(const Process* this) {
+   return this->cmdline;
+}
+
 static const char* Process_getSortKey(const Process* this) {
    return Process_getCommand(this);
 }

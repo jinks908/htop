@@ -324,6 +324,7 @@ static inline int Process_pidEqualCompare(const void* v1, const void* v2) {
 int Process_compareByKey_Base(const Process* p1, const Process* p2, ProcessField key);
 
 const char* Process_getCommand(const Process* this);
+const char* Process_getCommandFull(const Process* this);
 
 void Process_updateComm(Process* this, const char* comm);
 void Process_updateCmdline(Process* this, const char* cmdline, size_t basenameStart, size_t basenameEnd);
