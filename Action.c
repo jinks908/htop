@@ -683,7 +683,8 @@ static Htop_Reaction actionCopyPid(State* st) {
    // Run shell command to copy PID
    char cmd[64];
    snprintf(cmd, sizeof(cmd), "printf %d | pbcopy", row->id);
-   (void)system(cmd);
+   int ret = system(cmd);
+   (void)ret;
 
    // Format confirmation message
    char message[64];
@@ -730,7 +731,8 @@ static Htop_Reaction copyCmdPath(State* st, bool fullPath) {
 
    // Create and run shell command to copy command path to clipboard
    snprintf(cmdPath, sizeof(cmdPath), "printf '%s' | pbcopy", command);
-   (void)system(cmdPath);
+   int ret = system(cmd);
+   (void)ret;
 
    // Display confirmation in header
    Panel_setHeader((Panel*)st->mainPanel, message);
