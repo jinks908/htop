@@ -731,7 +731,7 @@ static Htop_Reaction copyCmdPath(State* st, bool fullPath) {
 
    // Create and run shell command to copy command path to clipboard
    snprintf(cmdPath, sizeof(cmdPath), "printf '%s' | pbcopy", command);
-   int ret = system(cmd);
+   int ret = system(cmdPath);
    (void)ret;
 
    // Display confirmation in header
