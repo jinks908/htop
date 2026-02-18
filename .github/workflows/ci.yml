@@ -10,6 +10,7 @@ env:
 jobs:
   build-ubuntu-latest-minimal-gcc:
     runs-on: ubuntu-latest
+    if: github.repository == 'htop-dev/htop'
     steps:
     - uses: actions/checkout@v6
     - name: Install Dependencies
@@ -343,6 +344,7 @@ jobs:
 
   build-solaris-latest-gcc:
       runs-on: ubuntu-22.04
+      if: github.repository == 'htop-dev/htop'
       timeout-minutes: 20
       steps:
         - uses: actions/checkout@v6
