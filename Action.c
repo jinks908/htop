@@ -474,6 +474,7 @@ static Htop_Reaction actionSetAffinity(State* st) {
 }
 */
 
+/*
 #ifdef SCHEDULER_SUPPORT
 static Htop_Reaction actionSetSchedPolicy(State* st) {
    if (!Action_writeableProcess(st))
@@ -517,7 +518,8 @@ static Htop_Reaction actionSetSchedPolicy(State* st) {
 
    return HTOP_REFRESH | HTOP_REDRAW_BAR | HTOP_KEEP_FOLLOWING;
 }
-#endif  /* SCHEDULER_SUPPORT */
+#endif
+*/
 
 static Htop_Reaction actionKill(State* st) {
    if (!Action_writeableProcess(st))
@@ -681,7 +683,7 @@ static Htop_Reaction actionCopyPid(State* st) {
    // Run shell command to copy PID
    char cmd[64];
    snprintf(cmd, sizeof(cmd), "printf %d | pbcopy", row->id);
-   system(cmd);
+   (void)system(cmd);
 
    // Format confirmation message
    char message[64];
@@ -728,7 +730,7 @@ static Htop_Reaction copyCmdPath(State* st, bool fullPath) {
 
    // Create and run shell command to copy command path to clipboard
    snprintf(cmdPath, sizeof(cmdPath), "printf '%s' | pbcopy", command);
-   system(cmdPath);
+   (void)system(cmdPath);
 
    // Display confirmation in header
    Panel_setHeader((Panel*)st->mainPanel, message);
