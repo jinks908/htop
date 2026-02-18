@@ -116,6 +116,7 @@ jobs:
   build-ubuntu-latest-pcp:
     # we want PCP v5.2.3+
     runs-on: ubuntu-22.04
+    if: github.repository == 'htop-dev/htop'
     steps:
     - uses: actions/checkout@v6
     - name: Install Dependencies
