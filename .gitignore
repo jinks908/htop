@@ -56,3 +56,4 @@ callgrind.out.*
 /.cache/clangd/
 .DS_Store
 build
+COLORS.md
